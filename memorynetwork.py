@@ -15,8 +15,8 @@ Time per epoch: 3s on CPU (core i7).
 from __future__ import print_function
 from keras.models import Sequential, Model
 from keras.layers.embeddings import Embedding
-from keras.layers import Input, Activation, Dense, Permute, Dropout, add, dot,
-concatenate
+from keras.layers import (Input, Activation, Dense, Permute, Dropout, add, dot,
+concatenate)
 from keras.layers import LSTM
 from keras.utils.data_utils import get_file
 from keras.preprocessing.sequence import pad_sequences
@@ -100,9 +100,9 @@ def vectorize_stories(data, word_idx, story_maxlen, query_maxlen):
 
 class MemNet(object):
     """Wrapper for memorynetwork code."""
-    def __init__(self, save=False):
+    def __init__(self, save):
         # store save flag
-        self.save
+        self.save = save
 
         # check if model exists
         if os.path.exists('chatbot.h5'):
@@ -255,3 +255,6 @@ class MemNet(object):
         # save
         if self.save:
             model.save('chatbot.h5')
+
+        # return model
+        return model
