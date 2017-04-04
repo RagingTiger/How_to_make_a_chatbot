@@ -14,12 +14,17 @@ Usage:
 # classes
 class ChatBot(object):
     """Interface to be used with fire module."""
-    def cli(self, save=None):
+    def qa(self, save=None):
         # get mem net
-        import memorynetwork
+        import memorynetwork as memnet
+
+        # check save val
+        save = True if save is not None else False
+        if save:
+            print memnet.colortxt('Model will be saved', 'red')
 
         # build
-        model = memorynetwork.MemNet(save)
+        model = memnet.MemNet(save)
 
 
 # executable

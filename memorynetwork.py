@@ -13,21 +13,35 @@ Time per epoch: 3s on CPU (core i7).
 
 # libs
 from __future__ import print_function
-from keras.models import Sequential, Model
-from keras.layers.embeddings import Embedding
-from keras.layers import (Input, Activation, Dense, Permute, Dropout, add, dot,
-concatenate)
-from keras.layers import LSTM
-from keras.utils.data_utils import get_file
-from keras.preprocessing.sequence import pad_sequences
-from functools import reduce
-import tarfile
-import numpy as np
 import re
 import os
+import sys
+import tarfile
+from functools import reduce
+import termcolor
+import numpy as np
+from keras.layers import LSTM
+from keras.models import Sequential, Model
+from keras.layers.embeddings import Embedding
+from keras.utils.data_utils import get_file
+from keras.preprocessing.sequence import pad_sequences
+from keras.layers import (
+                          Input,
+                          Activation,
+                          Dense,
+                          Permute,
+                          Dropout,
+                          add,
+                          dot,
+                          concatenate
+)
 
 
 # funcs
+def colortxt(txt, cval='yellow'):
+    return termcolor.colored(txt, cval)
+
+
 def tokenize(sent):
     '''Return the tokens of a sentence including punctuation.
     >>> tokenize('Bob dropped the apple. Where is the apple?')
@@ -104,15 +118,27 @@ class MemNet(object):
         # store save flag
         self.save = save
 
+        # store model
+        self.model = None
+
         # check if model exists
         if os.path.exists('chatbot.h5'):
+            print (colortxt('Loading model ...', 'red'))
             # TODO: write code to load model
-            pass
+            return None
         else:
             # prompt user to build model?
-            answer = raw_input('No model found. Build model? [Y/n]: ')
+            answer = raw_input(colortxt('No model found. Build one? [Y/n]: '))
             if answer == 'Y':
+                # warn
+                print (colortxt('Building model ...', 'red'))
+                # commence building
                 self.build_model()
+                # get model
+                return self.model
+            else:
+                # gotta exit
+                sys.exit()
 
     def build_model(self):
         """Simply a wrapper to build memory network model for above example."""
@@ -256,5 +282,5 @@ class MemNet(object):
         if self.save:
             model.save('chatbot.h5')
 
-        # return model
-        return model
+        # store model
+        self.model = model
