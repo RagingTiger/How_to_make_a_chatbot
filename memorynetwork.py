@@ -14,11 +14,8 @@ Time per epoch: 3s on CPU (core i7).
 # libs
 from __future__ import print_function
 import re
-import os
-import sys
 import tarfile
 from functools import reduce
-import termcolor
 import numpy as np
 from keras.layers import LSTM
 from keras.models import Sequential, Model
@@ -38,10 +35,6 @@ from keras.layers import (
 
 
 # funcs
-def colortxt(txt, cval='yellow'):
-    return termcolor.colored(txt, cval)
-
-
 def tokenize(sent):
     '''Return the tokens of a sentence including punctuation.
     >>> tokenize('Bob dropped the apple. Where is the apple?')
@@ -112,35 +105,11 @@ def vectorize_stories(data, word_idx, story_maxlen, query_maxlen):
             pad_sequences(Xq, maxlen=query_maxlen), np.array(Y))
 
 
+# classes
 class MemNet(object):
     """Wrapper for memorynetwork code."""
-    def __init__(self, save):
-        # store save flag
-        self.save = save
-
-        # store model
-        self.model = None
-
-        # check if model exists
-        if os.path.exists('chatbot.h5'):
-            print (colortxt('Loading model ...', 'red'))
-            # TODO: write code to load model
-            return None
-        else:
-            # prompt user to build model?
-            answer = raw_input(colortxt('No model found. Build one? [Y/n]: '))
-            if answer == 'Y':
-                # warn
-                print (colortxt('Building model ...', 'red'))
-                # commence building
-                self.build_model()
-                # get model
-                return self.model
-            else:
-                # gotta exit
-                sys.exit()
-
-    def build_model(self):
+    @staticmethod
+    def build_model(save, modname):
         """Simply a wrapper to build memory network model for above example."""
         try:
             path = get_file('babi-tasks-v1-2.tar.gz', origin='https://s3.amazonaws.com/text-datasets/babi_tasks_1-20_v1-2.tar.gz')
@@ -279,8 +248,8 @@ class MemNet(object):
                   validation_data=([inputs_test, queries_test], answers_test))
 
         # save
-        if self.save:
-            model.save('chatbot.h5')
+        if save:
+            model.save(modname)
 
         # store model
-        self.model = model
+        return model
