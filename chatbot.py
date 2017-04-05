@@ -35,7 +35,7 @@ class ChatModel(memnet.MemNet):
         if os.path.exists(modname):
             print (colortxt('Loading model ...', 'red'))
             # TODO: write code to load model
-            return None
+            self.model = self.load_model(modname)
         else:
             # prompt user to build model?
             answer = raw_input(colortxt('No model found. Build one? [Y/n]: '))
@@ -78,7 +78,6 @@ class ChatBot(object):
             # get question
             try:
                 question = raw_input(self._prompt)
-
             except EOFError:
                 sys.exit(self._halt)
 

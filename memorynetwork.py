@@ -17,6 +17,7 @@ import re
 import tarfile
 from functools import reduce
 import numpy as np
+import keras
 from keras.layers import LSTM
 from keras.models import Sequential, Model
 from keras.layers.embeddings import Embedding
@@ -108,6 +109,10 @@ def vectorize_stories(data, word_idx, story_maxlen, query_maxlen):
 # classes
 class MemNet(object):
     """Wrapper for memorynetwork code."""
+    @staticmethod
+    def load_model(model):
+        return keras.models.load_model(model)
+
     @staticmethod
     def build_model(save, modname):
         """Simply a wrapper to build memory network model for above example."""
