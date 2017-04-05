@@ -53,11 +53,11 @@ class ChatBot(object):
     """Interface to be used with fire module."""
     def __init__(self):
         # cache model
-        self.chatbot = None
+        self._chatbot = None
 
         # user messages
-        self.prompt = colortxt('{0}@chatbot: '.format(getpass.getuser()))
-        self.halt = colortxt('\nShutting down chatbot ...', 'red')
+        self._prompt = colortxt('{0}@chatbot: '.format(getpass.getuser()))
+        self._halt = colortxt('\nShutting down chatbot ...', 'red')
 
     def qa(self, save=None):
         # check save val
@@ -66,21 +66,21 @@ class ChatBot(object):
             print colortxt('Model will be saved', 'red')
 
         # build
-        self.chatbot = ChatModel(save)
+        self._chatbot = ChatModel(save)
 
         # run cli
         self.chatbot_cli()
 
-    def chatbot_cli(self):
+    def _chatbot_cli(self):
         """Run interactive prompt."""
         # start loop
         while 1:
             # get question
             try:
-                question = raw_input(self.prompt)
+                question = raw_input(self._prompt)
 
             except EOFError:
-                sys.exit(self.halt)
+                sys.exit(self._halt)
 
             except KeyboardInterrupt:
                 print '\n'
