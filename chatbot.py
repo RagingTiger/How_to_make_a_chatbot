@@ -69,7 +69,7 @@ class ChatBot(object):
         self._chatbot = ChatModel(save)
 
         # run cli
-        self.chatbot_cli()
+        self._chatbot_cli()
 
     def _chatbot_cli(self):
         """Run interactive prompt."""
